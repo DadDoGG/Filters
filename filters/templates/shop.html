@@ -1,0 +1,49 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+
+<h1>Магазин</h1>
+
+<select id="citySelect">
+    <option value="all" selected>Все города</option>
+    {% set city_values = [] %}
+    {% for shop in shops %}
+        {% for key, value in shop.contact.items() %}
+            {% if key == "city" %}
+                {% set _ = city_values.append(value) %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    {% for city in city_values|unique %}
+        <option value="{{ city }}">
+            {{ city }}
+        </option>
+    {% endfor %}
+</select>
+
+
+<ul class="shop-list">
+    {% for shop in shops %}
+        <li class="shop-item" data-city="{{ shop.contact.city }}">
+            <a href="{{ shop.id }}">{{ shop.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<script>
+    document.getElementById('citySelect').addEventListener('change', function() {
+        var selectedCity = this.value;
+        var shopItems = document.querySelectorAll('.shop-item');
+
+        shopItems.forEach(function(shopItem) {
+            var shopCity = shopItem.getAttribute('data-city');
+            if (selectedCity === 'all' || shopCity === selectedCity) {
+                shopItem.style.display = 'list-item';
+            } else {
+                shopItem.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+{% endblock %}

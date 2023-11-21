@@ -1,0 +1,26 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+
+<h1>{{ shop.name }}</h1>
+<ul>
+<li>Тип магазина: {{shop.shop_type}}
+<li>Контакты магазина:{{shop.contact}}
+<li>Количество сотрудникво:{{shop.workers}}
+<li>Задолженность перед поставщиком: {{shop.debt}}
+<li>Дата добавления магазина: {{shop.date_created}}
+<li>Продаваемые продукты:
+    <ul>
+        {% for product in shop.product %}
+        <li>{{ product.name }}</li>
+        {% endfor %}
+    </ul>
+    </li>
+    {% if shop.provider.name %}
+<li><a href="/admin/shopadminview/{{ shop.provider_id }}/">Поставщик: {{shop.provider.name}}</a>
+    {% endif %}
+</ul>
+{% if current_user.is_admin %}
+<a href="/admin/shopadminview/{{ shop.id }}/del">Удалить задолженность</a>
+{% endif %}
+{% endblock %}
